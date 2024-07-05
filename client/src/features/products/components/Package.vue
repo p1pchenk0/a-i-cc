@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { convertToPrice, getRandomInteger } from '@/shared/utils';
+import { getRandomInteger } from '@/shared/utils';
+import { c } from '@/localization';
 
 const props = withDefaults(
   defineProps<{
@@ -21,7 +22,7 @@ const props = withDefaults(
 );
 const randomRotation = props.still ? 0 : getRandomInteger(-5, 5);
 
-const formattedPrice = computed(() => (props.price ? convertToPrice(props.price) : 'Free'));
+const formattedPrice = computed(() => (props.price ? c(props.price) : 'Free'));
 
 const itemStyle = computed(() => {
   return {

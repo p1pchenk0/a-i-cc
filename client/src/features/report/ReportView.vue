@@ -3,10 +3,9 @@ import PageLayout from '@/layouts/PageLayout.vue';
 import { useReportStore } from '@/features/report/report.store';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
-import { convertToPrice } from '@/shared/utils';
 import { generateReport } from '@/features/report/utils';
 import AppButton from '@/components/AppButton.vue';
-import { t } from '@/localization';
+import { c, t } from '@/localization';
 
 const reportStore = useReportStore();
 
@@ -46,19 +45,19 @@ onMounted(() => {
         <tbody>
           <tr>
             <td>{{ t('report-page.total-income') }}</td>
-            <td>{{ convertToPrice(report!.totalIncome) }}</td>
+            <td>{{ c(report!.totalIncome) }}</td>
           </tr>
           <tr class="bg-red-accent-2">
             <td>{{ t('report-page.taxes') }}</td>
-            <td>{{ convertToPrice(report!.taxesToPay) }}</td>
+            <td>{{ c(report!.taxesToPay) }}</td>
           </tr>
           <tr class="bg-teal">
             <td>{{ t('report-page.revenue') }}</td>
-            <td>{{ convertToPrice(report!.totalIncome - report!.taxesToPay) }}</td>
+            <td>{{ c(report!.totalIncome - report!.taxesToPay) }}</td>
           </tr>
           <tr>
             <td>{{ t('report-page.gifted') }}</td>
-            <td>{{ convertToPrice(report!.totalGifted) }}</td>
+            <td>{{ c(report!.totalGifted) }}</td>
           </tr>
         </tbody>
       </v-table>

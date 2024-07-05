@@ -57,5 +57,6 @@
     "prints-won": "Prints won",
     "save": "Save report",
     "error": "Error loading report"
-  }
+  },
+  "currency": "USD"
 }

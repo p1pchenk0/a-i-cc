@@ -6,13 +6,12 @@ import PageLayout from '@/layouts/PageLayout.vue';
 import Tweaker from '@/features/products/components/Tweaker.vue';
 import type { PhotoPackage } from '@/features/products/types';
 import { computed, onMounted, ref } from 'vue';
-import { convertToPrice } from '@/shared/utils';
 import { storeToRefs } from 'pinia';
 import { useCartStore } from '@/stores/cart';
 import { useLottery } from '@/features/lottery';
 import { usePhotoStore } from '@/features/photo/photo.store';
 import { useProductsStore } from '@/features/products/products.store';
-import { t } from '@/localization';
+import { c, t } from '@/localization';
 
 const productsStore = useProductsStore();
 const { products, isLoading, isError } = storeToRefs(productsStore);
@@ -30,7 +29,7 @@ const dialog = ref(false);
 const formattedTotal = computed(() => {
   return {
     ...cartTotal.value,
-    total: convertToPrice(cartTotal.value.total)
+    total: c(cartTotal.value.total)
   };
 });
 
