@@ -1,1 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton+SC&family=Nabla&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Honk&family=Nabla&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-image: linear-gradient(135deg, rgba(var(--v-theme-surface), 1) 25%, transparent 25%), linear-gradient(225deg, rgba(var(--v-theme-surface), 1) 25%, transparent 25%), linear-gradient(45deg, rgba(var(--v-theme-surface), 1) 25%, transparent 25%), linear-gradient(315deg, rgba(var(--v-theme-surface), 1) 25%, transparent 25%), linear-gradient(0, #212121, #265033);
+    background-color: var(--v-theme-surface);
+    background-position: 40px 0, 40px 0, 0 0, 0 0;
+    background-size: 80px 80px;
+    background-repeat: repeat;
+}

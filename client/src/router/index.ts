@@ -1,26 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
+import { routes } from '@/router/routes';
+import { ro } from 'vuetify/locale';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView
+      path: '',
+      redirect: { name: routes.photo.name }
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: routes.photo.path,
+      name: routes.photo.name,
+      component: () => import('@/features/photo/PhotoView.vue')
     },
     {
-      path: '/mirror',
-      name: 'mirror',
-      component: () => import('../features/mirror/MirrorView.vue')
+      path: routes.products.path,
+      name: routes.products.name,
+      component: () => import('@/features/products/ProductsView.vue')
+    },
+    {
+      path: routes.report.path,
+      name: routes.report.name,
+      component: () => import('@/features/report/ReportView.vue')
     }
   ]
 });
