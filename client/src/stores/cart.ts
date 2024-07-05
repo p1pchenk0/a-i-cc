@@ -2,11 +2,11 @@ import type { PhotoPackage } from '@/features/products/types';
 import { cartService } from '@/shared/services/cart.service';
 import { computed, readonly, ref } from 'vue';
 import { defineStore } from 'pinia';
+import { useLoader } from '@/shared/utils/load';
 
 export const useCartStore = defineStore('cart', () => {
   const _cart = ref<PhotoPackage[]>([]);
-  const isPaymentInProgress = ref(false);
-  const isPaymentSuccessful = ref(false);
+  const { load, isLoading, isError } = useLoader(payForCart);
 
   const cart = computed(() => readonly(_cart.value));
 
@@ -48,19 +48,14 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   async function payForCart() {
-    isPaymentInProgress.value = true;
-
-    const result = await cartService.sendOrder({
+    const { success } = await cartService.sendOrder({
       freeItems: cartTotal.value.freeItems,
       pricedItem: cartTotal.value.pricedItem!
     });
 
-    isPaymentInProgress.value = false;
-    isPaymentSuccessful.value = result.success;
+    if (success) clearCart();
 
-    if (isPaymentSuccessful.value) clearCart();
-
-    return result;
+    return success;
   }
 
   return {
@@ -68,9 +63,9 @@ export const useCartStore = defineStore('cart', () => {
     cartTotal,
     hasFreeItems,
     pricedItem,
-    isPaymentInProgress,
-    isPaymentSuccessful,
-    payForCart,
+    isPaymentInProgress: isLoading,
+    isPaymentSuccessful: computed(() => !isError.value),
+    payForCart: load,
     addToCart,
     clearCart,
     initCart

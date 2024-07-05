@@ -91,19 +91,20 @@ onBeforeUnmount(() => {
     <template #actions>
       <AppButton
         :disabled="!isCameraStreaming"
-        @click="savePhoto(false)"
-        icon="mdi-content-save-outline"
+        @click="savePhoto(true)"
+        color="success"
+        icon="mdi-camera"
+        size="large"
       >
-        Save photo
+        Take photo & proceed
       </AppButton>
 
       <AppButton
         :disabled="!isCameraStreaming"
-        @click="savePhoto(true)"
-        color="success"
-        icon="mdi-camera"
+        @click="savePhoto(false)"
+        icon="mdi-content-save-outline"
       >
-        Take photo & proceed
+        Save photo
       </AppButton>
     </template>
   </PageLayout>

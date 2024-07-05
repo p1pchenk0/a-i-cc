@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
+import { RouterView, useRoute } from 'vue-router';
 import { routes } from '@/router/routes';
+import { watch } from 'vue';
+
+const route = useRoute();
 
 const links = [
   {
-    title: 'Photo',
+    title: 'Photo booth',
     name: routes.photo.name
   },
   {
@@ -16,6 +19,30 @@ const links = [
     name: routes.report.name
   }
 ];
+
+function changeFavicon(faviconURL: string) {
+  let link = document.getElementById('dynamic-favicon') as HTMLLinkElement;
+
+  if (!link) {
+    link = document.createElement('link');
+    link.id = 'dynamic-favicon';
+    link.rel = 'icon';
+    document.head.appendChild(link);
+  }
+
+  link.href = faviconURL;
+}
+
+watch(
+  () => route.name,
+  () => {
+    const newTitle = links.find((el) => el.name === route.name)?.title;
+
+    if (newTitle) document.title = newTitle;
+
+    changeFavicon(`${route.name?.toString()}.ico`);
+  }
+);
 </script>
 
 <template>

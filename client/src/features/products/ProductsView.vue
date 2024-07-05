@@ -14,7 +14,7 @@ import { usePhotoStore } from '@/features/photo/photo.store';
 import { useProductsStore } from '@/features/products/products.store';
 
 const productsStore = useProductsStore();
-const { products } = storeToRefs(productsStore);
+const { products, isLoading, isError } = storeToRefs(productsStore);
 const photoStore = usePhotoStore();
 const { lastPhotoUrl } = storeToRefs(photoStore);
 const cartStore = useCartStore();
@@ -52,9 +52,9 @@ const makeOrder = (photoPackage: PhotoPackage) => {
 };
 
 const pay = async () => {
-  const result = await cartStore.payForCart();
+  await cartStore.payForCart();
 
-  isPaymentDone.value = !!result;
+  isPaymentDone.value = true;
 
   if (isPaymentSuccessful.value) resetLottery();
 };
@@ -83,12 +83,17 @@ onMounted(() => {
       <LotteryHint />
 
       <div class="justify-center d-flex ga-6 mt-6 flex-column flex-md-row">
-        <Package
-          v-for="photoPackage in products"
-          v-bind="{ ...photoPackage, photoUrl: lastPhotoUrl }"
-          :key="photoPackage.id"
-          @click="makeOrder(photoPackage)"
-        />
+        <div v-if="isLoading" class="w-100">
+          <v-skeleton-loader class="w-100 ga-4 flex-nowrap" type="image@3"></v-skeleton-loader>
+        </div>
+        <template v-if="!isLoading && !isError">
+          <Package
+            v-for="photoPackage in products"
+            v-bind="{ ...photoPackage, photoUrl: lastPhotoUrl }"
+            :key="photoPackage.id"
+            @click="makeOrder(photoPackage)"
+          />
+        </template>
       </div>
 
       <div class="mt-6">
@@ -131,7 +136,13 @@ onMounted(() => {
     </template>
 
     <template #actions v-if="cart.length">
-      <AppButton :loading="isPaymentInProgress" :disabled="isPaymentInProgress" @click="pay">
+      <AppButton
+        :loading="isPaymentInProgress"
+        :disabled="isPaymentInProgress"
+        @click="pay"
+        size="large"
+        icon="mdi-credit-card-outline"
+      >
         Pay
       </AppButton>
 
@@ -151,6 +162,10 @@ onMounted(() => {
     <div class="text-center">
       {{ paymentResultText }}
     </div>
+  </v-snackbar>
+
+  <v-snackbar :model-value="isError" color="error" :timeout="2000">
+    <div class="text-center">Error loading products</div>
   </v-snackbar>
 
   <v-dialog v-model="dialog" width="auto" persistent>
