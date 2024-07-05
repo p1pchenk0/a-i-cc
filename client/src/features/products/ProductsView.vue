@@ -12,6 +12,7 @@ import { useCartStore } from '@/stores/cart';
 import { useLottery } from '@/features/lottery';
 import { usePhotoStore } from '@/features/photo/photo.store';
 import { useProductsStore } from '@/features/products/products.store';
+import { t } from '@/localization';
 
 const productsStore = useProductsStore();
 const { products, isLoading, isError } = storeToRefs(productsStore);
@@ -34,7 +35,9 @@ const formattedTotal = computed(() => {
 });
 
 const paymentResultText = computed(() => {
-  return isPaymentSuccessful.value ? 'Payment is done' : 'Something went wrong, try again later';
+  return isPaymentSuccessful.value
+    ? t('product-page.payment-success')
+    : t('product-page.payment-error');
 });
 
 const makeOrder = (photoPackage: PhotoPackage) => {
@@ -77,8 +80,8 @@ onMounted(() => {
 
 <template>
   <PageLayout>
-    <template #title> Make an order</template>
-    <template #subtitle>Select format which suits you the best</template>
+    <template #title>{{ t('product-page.title') }}</template>
+    <template #subtitle>{{ t('product-page.subtitle') }}</template>
     <template #text>
       <LotteryHint />
 
@@ -98,10 +101,10 @@ onMounted(() => {
 
       <div class="mt-6">
         <v-alert v-if="!cart.length" class="text-center justify-center" icon="mdi-cart-remove">
-          Your cart is empty
+          {{ t('product-page.empty-cart') }}
         </v-alert>
         <template v-else>
-          <div>You pay for:</div>
+          <div>{{ t('product-page.pay-for') }}</div>
           <Package
             class="justify-center mb-4"
             v-bind="{
@@ -115,7 +118,7 @@ onMounted(() => {
           <v-alert v-if="hasFreeItems" color="success" class="text-center mb-2">
             <div class="mb-4">
               <v-icon icon="mdi-emoticon-cool" />
-              Congrats! You have won extra prints
+              {{ t('product-page.win') }}
             </div>
             <div class="d-flex ga-8 justify-center flex-column flex-md-row">
               <Package
@@ -130,7 +133,9 @@ onMounted(() => {
               />
             </div>
           </v-alert>
-          <v-chip class="mt-2">Total: {{ formattedTotal.total }}</v-chip>
+          <v-chip class="mt-2">
+            {{ t('product-page.total', { total: formattedTotal.total }) }}
+          </v-chip>
         </template>
       </div>
     </template>
@@ -143,11 +148,11 @@ onMounted(() => {
         size="large"
         icon="mdi-credit-card-outline"
       >
-        Pay
+        {{ t('product-page.pay') }}
       </AppButton>
 
       <AppButton :disabled="isPaymentInProgress" color="error" @click="clearCart">
-        Clear cart
+        {{ t('product-page.clear-cart') }}
       </AppButton>
     </template>
   </PageLayout>
@@ -165,18 +170,17 @@ onMounted(() => {
   </v-snackbar>
 
   <v-snackbar :model-value="isError" color="error" :timeout="2000">
-    <div class="text-center">Error loading products</div>
+    <div class="text-center">{{ t('product-page.products-load-error') }}</div>
   </v-snackbar>
 
   <v-dialog v-model="dialog" width="auto" persistent>
-    <v-card max-width="400" title="Are you sure?">
+    <v-card max-width="400" :title="t('product-page.sure')">
       <template #text>
-        You have won <span class="text-amber">free items</span>. Clearing the cart will also remove
-        prize, and who knows when you are lucky again...
+        {{ t('product-page.warning-lose-prize') }}
       </template>
       <template v-slot:actions>
-        <AppButton color="error" @click="clearCart">Clear cart</AppButton>
-        <AppButton @click="dialog = false">Keep cart</AppButton>
+        <AppButton color="error" @click="clearCart">{{ t('product-page.clear-cart') }}</AppButton>
+        <AppButton @click="dialog = false">{{ t('product-page.keep-cart') }}</AppButton>
       </template>
     </v-card>
   </v-dialog>

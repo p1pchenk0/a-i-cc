@@ -1,0 +1,61 @@
+{
+  "admin-title": "Admin panel",
+  "lottery": {
+    "title": "Chance to win extra prints!",
+    "hint": "Each time you make a new order, our lottery system checks whether you can get two other prints for free"
+  },
+  "interval": {
+    "title": "Waiting whole hour to check whether lottery works as expected can be... dramatically boring. With the help of these switches we can reduce waiting time:",
+    "hour": "One hour",
+    "minute": "One minute",
+    "order": "Ain't nobody got time for that (once per order)"
+  },
+  "reverse": {
+    "hint": "Write something in input",
+    "all": "Who doesn't like good old string reverse?",
+    "words": "Or only words order? Hold my lemonade"
+  },
+  "photo-controls": {
+    "char-limit": "No more than {count} chars",
+    "toggle-mirror": "Toggle mirror",
+    "text-on-screen": "Text on screen",
+    "font": "Font"
+  },
+  "photo-booth-page": {
+    "title": "Photo booth",
+    "subtitle": "Use actions to toggle mirror mode and input field to add text on image",
+    "take-and-proceed": "Take photo & proceed",
+    "save": "Save photo",
+    "no-permission": "Please, give permission for video capturing"
+  },
+  "product-page": {
+    "title": "Make an order",
+    "subtitle": "Select format which suits you the best",
+    "empty-cart": "Your cart is empty",
+    "pay-for": "You pay for:",
+    "win": "Congrats! You have won extra prints",
+    "total": "Total: {total}",
+    "pay": "Pay",
+    "clear-cart": "Clear cart",
+    "keep-cart": "Keep cart",
+    "products-load-error": "Error loading products",
+    "sure": "Are you sure?",
+    "payment-success": "Payment is done",
+    "payment-error": "Something went wrong, try again later",
+    "warning-lose-prize": "You have won free items. Clearing the cart will also remove prize, and who knows when you are lucky again..."
+  },
+  "report-page": {
+    "title": "Monthly report",
+    "financial-section": "Financial",
+    "total-income": "Total income",
+    "taxes": "Taxes to pay",
+    "revenue": "Revenue",
+    "gifted": "Total gifted in lottery",
+    "operational": "Operational",
+    "orders-made": "Orders made",
+    "prints-done": "Prints done",
+    "prints-won": "Prints won",
+    "save": "Save report",
+    "error": "Error loading report"
+  }
+}

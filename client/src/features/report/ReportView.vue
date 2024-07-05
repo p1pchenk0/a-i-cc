@@ -2,10 +2,11 @@
 import PageLayout from '@/layouts/PageLayout.vue';
 import { useReportStore } from '@/features/report/report.store';
 import { storeToRefs } from 'pinia';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import { convertToPrice } from '@/shared/utils';
 import { generateReport } from '@/features/report/utils';
 import AppButton from '@/components/AppButton.vue';
+import { t } from '@/localization';
 
 const reportStore = useReportStore();
 
@@ -28,7 +29,7 @@ onMounted(() => {
 
 <template>
   <PageLayout>
-    <template #title> Monthly report </template>
+    <template #title>{{ t('report-page.title') }}</template>
 
     <template v-if="isReportLoading">
       <v-skeleton-loader :type="skeletonType"></v-skeleton-loader>
@@ -37,24 +38,26 @@ onMounted(() => {
       <v-table theme="dark">
         <thead>
           <tr>
-            <th colspan="2" class="text-left">Financial</th>
+            <th colspan="2" class="text-left">
+              {{ t('report-page.financial-section') }}
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Total income</td>
+            <td>{{ t('report-page.total-income') }}</td>
             <td>{{ convertToPrice(report!.totalIncome) }}</td>
           </tr>
           <tr class="bg-red-accent-2">
-            <td>Taxes to pay</td>
+            <td>{{ t('report-page.taxes') }}</td>
             <td>{{ convertToPrice(report!.taxesToPay) }}</td>
           </tr>
           <tr class="bg-teal">
-            <td>Revenue</td>
+            <td>{{ t('report-page.revenue') }}</td>
             <td>{{ convertToPrice(report!.totalIncome - report!.taxesToPay) }}</td>
           </tr>
           <tr>
-            <td>Total gifted in lottery</td>
+            <td>{{ t('report-page.gifted') }}</td>
             <td>{{ convertToPrice(report!.totalGifted) }}</td>
           </tr>
         </tbody>
@@ -63,20 +66,20 @@ onMounted(() => {
       <v-table theme="dark">
         <thead>
           <tr>
-            <th colspan="2" class="text-left">Operational</th>
+            <th colspan="2" class="text-left">{{ t('report-page.operational') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Orders made</td>
+            <td>{{ t('report-page.orders-made') }}</td>
             <td>{{ report!.ordersMade }}</td>
           </tr>
           <tr>
-            <td>Prints done</td>
+            <td>{{ t('report-page.prints-done') }}</td>
             <td>{{ report!.printsDone }}</td>
           </tr>
           <tr>
-            <td>Prints won</td>
+            <td>{{ t('report-page.prints-won') }}</td>
             <td>{{ report!.printsWon }}</td>
           </tr>
         </tbody>
@@ -90,13 +93,13 @@ onMounted(() => {
         :loading="isReportLoading"
         icon="mdi-content-save"
       >
-        Save report
+        {{ t('report-page.save') }}
       </AppButton>
     </template>
   </PageLayout>
 
   <v-snackbar :model-value="isErrorLoadingReport" color="error" :timeout="2000">
-    <div class="text-center">Error loading report</div>
+    <div class="text-center">{{ t('report-page.error') }}</div>
   </v-snackbar>
 </template>
 

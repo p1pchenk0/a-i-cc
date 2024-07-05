@@ -11,6 +11,7 @@ import SplashFx from '@/features/photo/components/SplashFx.vue';
 import Extras from '@/features/photo/components/Extras.vue';
 import { useRouter } from 'vue-router';
 import { routes } from '@/router/routes';
+import { t } from '@/localization';
 
 const router = useRouter();
 const isPhotoTaken = ref(false);
@@ -70,9 +71,9 @@ onBeforeUnmount(() => {
 
 <template>
   <PageLayout ref="layoutRef">
-    <template #title> Photo booth </template>
+    <template #title>{{ t('photo-booth-page.title') }}</template>
     <template #text>
-      Use actions to toggle mirror mode and input field to add text on image
+      {{ t('photo-booth-page.subtitle') }}
     </template>
 
     <video ref="videoRef" autoplay hidden class="w-100"></video>
@@ -96,7 +97,7 @@ onBeforeUnmount(() => {
         icon="mdi-camera"
         size="large"
       >
-        Take photo & proceed
+        {{ t('photo-booth-page.take-and-proceed') }}
       </AppButton>
 
       <AppButton
@@ -104,13 +105,13 @@ onBeforeUnmount(() => {
         @click="savePhoto(false)"
         icon="mdi-content-save-outline"
       >
-        Save photo
+        {{ t('photo-booth-page.save') }}
       </AppButton>
     </template>
   </PageLayout>
 
   <v-snackbar v-model="isSnackbarShown">
-    <div>Please, give permission for video capturing</div>
+    <div>{{ t('photo-booth-page.no-permission') }}</div>
   </v-snackbar>
 
   <Extras :text="textOnScreen" />

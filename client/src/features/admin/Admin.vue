@@ -1,6 +1,10 @@
+<script setup lang="ts">
+import { t } from '@/localization';
+</script>
+
 <template>
   <div class="admin-panel position-fixed bottom-0 text-green bg-grey-darken-4 pa-4">
-    <div class="mb-3 text-h5">Admin panel</div>
+    <div class="mb-3 text-h5">{{ t('admin-title') }}</div>
     <slot></slot>
   </div>
 </template>
