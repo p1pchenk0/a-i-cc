@@ -1,0 +1,25 @@
+{
+  "products": [
+    {
+      "id": "4x6",
+      "price": 5,
+      "width": 4,
+      "height": 6
+    },
+    {
+      "id": "6x12",
+      "price": 7,
+      "width": 12,
+      "height": 6
+    },
+    {
+      "id": "2x6",
+      "price": 5,
+      "minAmount": 2,
+      "width": 2,
+      "height": 6,
+      "photosPerItem": 3
+    }
+  ],
+  "orders": []
+}
