@@ -1,10 +1,11 @@
 import axios from 'axios';
 import type { PhotoPackage, RawPackage } from '@/features/products/types';
+import { apiClient } from '@/shared/api/api.client';
 
 export const productService = {
   async getProducts(): Promise<PhotoPackage[]> {
     try {
-      const result = await axios.get<RawPackage[]>('http://127.0.0.1:3000/products');
+      const result = await apiClient.get<RawPackage[]>('products');
 
       return result.data.map((el) => ({
         id: el.id,

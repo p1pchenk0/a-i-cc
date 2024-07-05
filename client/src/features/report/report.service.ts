@@ -1,10 +1,11 @@
 import axios from 'axios';
 import type { RawReport } from '@/features/report/types';
+import { apiClient } from '@/shared/api/api.client';
 
 export const reportService = {
   async getReport(month: number, year: number): Promise<RawReport> {
     try {
-      const result = await axios.get<RawReport>('http://127.0.0.1:3000/report', {
+      const result = await apiClient.get<RawReport>('report', {
         params: {
           month,
           year

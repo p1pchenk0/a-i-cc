@@ -1,5 +1,5 @@
-import axios from 'axios';
 import type { PhotoPackage } from '@/features/products/types';
+import { apiClient } from '@/shared/api/api.client';
 
 export const cartService = {
   async sendOrder(order: { freeItems: PhotoPackage[]; pricedItem: PhotoPackage }) {
@@ -9,7 +9,7 @@ export const cartService = {
         { id: order.pricedItem.id, price: order.pricedItem.price }
       ];
 
-      const result = await axios.post<{ success: boolean }>('http://127.0.0.1:3000/order', payload);
+      const result = await apiClient.post<{ success: boolean }>('order', payload);
 
       return result.data;
     } catch (err) {
