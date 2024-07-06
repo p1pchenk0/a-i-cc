@@ -14,9 +14,9 @@ export function t(key: Keys, options?: any) {
   return i18n.global.t(key, options);
 }
 
-export function c(rawPrice: number): string {
+export function c(rawPriceInCents: number): string {
   return new Intl.NumberFormat(i18n.global.locale, {
     style: 'currency',
     currency: i18n.global.messages[i18n.global.locale].currency
-  }).format(rawPrice);
+  }).format(rawPriceInCents / 100);
 }

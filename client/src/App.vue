@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router';
 import { routes } from '@/router/routes';
-import { watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { PageLayout } from '@/layouts';
 
 const route = useRoute();
+const currentLayout = ref('');
 
 const links = [
   {
@@ -19,6 +21,14 @@ const links = [
     name: routes.report.name
   }
 ];
+
+const layoutMap = {
+  page: PageLayout
+};
+
+const layoutComponent = computed(() => {
+  return layoutMap[currentLayout.value as keyof typeof layoutMap] || layoutMap.page;
+});
 
 function changeFavicon(faviconURL: string) {
   let link = document.getElementById('dynamic-favicon') as HTMLLinkElement;
@@ -41,6 +51,8 @@ watch(
     if (newTitle) document.title = newTitle;
 
     changeFavicon(`${route.name?.toString()}.ico`);
+
+    currentLayout.value = route.meta.layout as string;
   }
 );
 </script>
@@ -51,7 +63,9 @@ watch(
       {{ link.title }}
     </RouterLink>
   </div>
-  <RouterView />
+  <component :is="layoutComponent">
+    <RouterView />
+  </component>
 </template>
 
 <style lang="scss" scoped>

@@ -12,17 +12,26 @@ const router = createRouter({
     {
       path: routes.photo.path,
       name: routes.photo.name,
-      component: () => import('@/features/photo/PhotoView.vue')
+      component: () => import('@/features/photo/PhotoView.vue'),
+      meta: {
+        layout: 'page'
+      }
     },
     {
       path: routes.products.path,
       name: routes.products.name,
-      component: () => import('@/features/products/ProductsView.vue')
+      component: () => import('@/features/products/ProductsView.vue'),
+      meta: {
+        layout: 'page'
+      }
     },
     {
       path: routes.report.path,
       name: routes.report.name,
-      component: () => import('@/features/report/ReportView.vue')
+      component: () => import('@/features/report/ReportView.vue'),
+      meta: {
+        layout: 'page'
+      }
     }
   ]
 });

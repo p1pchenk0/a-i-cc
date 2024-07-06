@@ -16,7 +16,7 @@ export const reportService = {
       const result = await apiClient.get<RawReport>('report', {
         params: {
           custom: true,
-          income
+          income: income * 100
         }
       });
 

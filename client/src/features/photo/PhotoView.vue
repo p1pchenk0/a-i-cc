@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { Extras, PhotoActions, PhotoControls, SplashFx } from '@/features/photo/components';
 import { FONTS } from '@/features/photo/constants';
-import { PageLayout } from '@/layouts';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { routes } from '@/router/routes';
 import { streamVideo } from '@/features/photo/utils';
 import { t } from '@/localization';
 import { usePhotoStore } from '@/features/photo/photo.store';
 import { useRouter } from 'vue-router';
-import { AppSnackbar } from '@/components';
+import { AppActions, AppHeading, AppSnackbar } from '@/components';
 
 const router = useRouter();
 const isPhotoTaken = ref(false);
@@ -17,7 +16,6 @@ const isMirrorOn = ref(false);
 const textOnScreen = ref('Oh hi!');
 const videoRef = ref<HTMLVideoElement>();
 const canvasRef = ref<HTMLCanvasElement>();
-const layoutRef = ref<InstanceType<typeof PageLayout>>();
 const stopListenToVideoStream = ref<Function | null>(null);
 const activeFont = ref(FONTS[0]);
 
@@ -68,29 +66,28 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <PageLayout ref="layoutRef">
-    <template #title>{{ t('photo-booth-page.title') }}</template>
-    <template #text>
-      {{ t('photo-booth-page.subtitle') }}
-    </template>
+  <AppHeading>{{ t('photo-booth-page.title') }}</AppHeading>
 
-    <video ref="videoRef" autoplay hidden class="w-100"></video>
-    <div class="position-relative d-flex rounded overflow-hidden">
-      <SplashFx v-model="isPhotoTaken" />
-      <canvas ref="canvasRef"></canvas>
-    </div>
+  <div class="mt-2">
+    {{ t('photo-booth-page.subtitle') }}
+  </div>
 
-    <PhotoControls
-      class="mt-2 px-4"
-      v-model:mirror="isMirrorOn"
-      v-model:text-on-screen="textOnScreen"
-      v-model:active-font="activeFont"
-    />
+  <video ref="videoRef" autoplay hidden class="w-100"></video>
+  <div class="position-relative d-flex rounded overflow-hidden mt-2">
+    <SplashFx v-model="isPhotoTaken" />
+    <canvas ref="canvasRef"></canvas>
+  </div>
 
-    <template #actions>
-      <PhotoActions :disabled="!isCameraStreaming" @action="onPhotoAction" />
-    </template>
-  </PageLayout>
+  <PhotoControls
+    class="mt-4"
+    v-model:mirror="isMirrorOn"
+    v-model:text-on-screen="textOnScreen"
+    v-model:active-font="activeFont"
+  />
+
+  <AppActions>
+    <PhotoActions :disabled="!isCameraStreaming" @action="onPhotoAction" />
+  </AppActions>
 
   <AppSnackbar v-model="isSnackbarShown">
     <div>{{ t('photo-booth-page.no-permission') }}</div>

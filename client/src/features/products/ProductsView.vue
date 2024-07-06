@@ -10,7 +10,7 @@ import { useCartStore } from '@/features/cart/cart.store';
 import { useLottery } from '@/features/lottery';
 import { usePhotoStore } from '@/features/photo/photo.store';
 import { useProductsStore } from '@/features/products/products.store';
-import { AppSkeleton, AppSnackbar } from '@/components';
+import { AppActions, AppHeading, AppSkeleton, AppSnackbar } from '@/components';
 
 const productsStore = useProductsStore();
 const { products, isLoading, isError } = storeToRefs(productsStore);
@@ -82,39 +82,35 @@ onMounted(() => {
 </script>
 
 <template>
-  <PageLayout>
-    <template #title>{{ t('product-page.title') }}</template>
-    <template #subtitle>{{ t('product-page.subtitle') }}</template>
-    <template #text>
-      <LotteryHint />
+  <AppHeading>{{ t('product-page.title') }}</AppHeading>
+  <div class="mt-2">{{ t('product-page.subtitle') }}</div>
+  <div class="mt-2"><LotteryHint /></div>
 
-      <div class="justify-center d-flex ga-6 mt-6 flex-column flex-md-row">
-        <div v-if="isLoading" class="w-100">
-          <AppSkeleton class="w-100 ga-4 flex-nowrap" type="image@3" />
-        </div>
-        <template v-if="!isLoading && !isError">
-          <Package
-            v-for="photoPackage in products"
-            v-bind="{ ...photoPackage, photoUrl: lastPhotoUrl }"
-            :key="photoPackage.id"
-            @click="makeOrder(photoPackage)"
-          />
-        </template>
-      </div>
-
-      <CartSummary
-        :free-items="cartTotal.freeItems"
-        :total="cartTotal.total"
-        :priced-item="cartTotal.pricedItem"
-        :is-empty="isEmptyCart"
-        :photo-url="lastPhotoUrl"
+  <div class="justify-center d-flex ga-6 mt-6 flex-column flex-md-row">
+    <div v-if="isLoading" class="w-100">
+      <AppSkeleton class="w-100 ga-4 flex-nowrap" type="image@3" />
+    </div>
+    <template v-if="!isLoading && !isError">
+      <Package
+        v-for="photoPackage in products"
+        v-bind="{ ...photoPackage, photoUrl: lastPhotoUrl }"
+        :key="photoPackage.id"
+        @click="makeOrder(photoPackage)"
       />
     </template>
+  </div>
 
-    <template #actions v-if="!isEmptyCart">
-      <CartActions :loading="isPaymentInProgress" @action="onCartAction" />
-    </template>
-  </PageLayout>
+  <CartSummary
+    :free-items="cartTotal.freeItems"
+    :total="cartTotal.total"
+    :priced-item="cartTotal.pricedItem"
+    :is-empty="isEmptyCart"
+    :photo-url="lastPhotoUrl"
+  />
+
+  <AppActions v-if="!isEmptyCart">
+    <CartActions :loading="isPaymentInProgress" @action="onCartAction" />
+  </AppActions>
 
   <Tweaker v-model="selectedLotteryInterval" />
 

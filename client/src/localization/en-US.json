@@ -57,7 +57,8 @@
     "prints-won": "Prints won",
     "save": "Save report",
     "error": "Error loading report",
-    "custom-income": "Custom income"
+    "custom-income": "Custom income",
+    "custom-income-label": "Enter custom income"
   },
   "currency": "USD"
 }
