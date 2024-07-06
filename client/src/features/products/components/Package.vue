@@ -90,7 +90,7 @@ const getPhotoItemStyles = () => {
   }
 
   &__name {
-    right: 0;
+    right: 15px;
     bottom: 10px;
   }
 

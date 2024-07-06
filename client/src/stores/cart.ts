@@ -31,9 +31,11 @@ export const useCartStore = defineStore('cart', () => {
     };
   });
 
-  const pricedItem = computed(() => cartTotal.value.pricedItem);
+  const isEmptyCart = computed(() => !_cart.value.length);
 
   const hasFreeItems = computed(() => !!cartTotal.value.freeItems.length);
+
+  const isPaymentSuccessful = computed(() => !isError.value);
 
   function clearCart() {
     _cart.value = [];
@@ -59,15 +61,15 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   return {
+    addToCart,
     cart,
     cartTotal,
-    hasFreeItems,
-    pricedItem,
-    isPaymentInProgress: isLoading,
-    isPaymentSuccessful: computed(() => !isError.value),
-    payForCart: load,
-    addToCart,
     clearCart,
-    initCart
+    hasFreeItems,
+    initCart,
+    isEmptyCart,
+    isPaymentInProgress: isLoading,
+    isPaymentSuccessful,
+    payForCart: load
   };
 });

@@ -10,26 +10,22 @@ import { useProductsStore } from '@/features/products/products.store';
 import { c, t } from '@/localization';
 import { LotteryHint, Package, Tweaker } from '@/features/products/components';
 import { PageLayout } from '@/layouts';
+import CartSummary from '@/features/products/components/CartSummary.vue';
+import ClearCartDialog from '@/features/products/components/ClearCartDialog.vue';
+import CartActions from '@/features/products/components/CartActions.vue';
 
 const productsStore = useProductsStore();
 const { products, isLoading, isError } = storeToRefs(productsStore);
 const photoStore = usePhotoStore();
 const { lastPhotoUrl } = storeToRefs(photoStore);
 const cartStore = useCartStore();
-const { cart, cartTotal, hasFreeItems, pricedItem, isPaymentInProgress, isPaymentSuccessful } =
+const { cart, cartTotal, isEmptyCart, hasFreeItems, isPaymentInProgress, isPaymentSuccessful } =
   storeToRefs(cartStore);
 
 const { selectedLotteryInterval, resetLottery, attemptLotteryPlay } = useLottery();
 
 const isPaymentDone = ref(false);
 const dialog = ref(false);
-
-const formattedTotal = computed(() => {
-  return {
-    ...cartTotal.value,
-    total: c(cartTotal.value.total)
-  };
-});
 
 const paymentResultText = computed(() => {
   return isPaymentSuccessful.value
@@ -70,6 +66,16 @@ const clearCart = () => {
   dialog.value = true;
 };
 
+const onCartAction = (type: string) => {
+  if (type === 'pay') {
+    pay();
+
+    return;
+  }
+
+  clearCart();
+};
+
 onMounted(() => {
   productsStore.initProducts();
 });
@@ -96,61 +102,17 @@ onMounted(() => {
         </template>
       </div>
 
-      <div class="mt-6">
-        <v-alert v-if="!cart.length" class="text-center justify-center" icon="mdi-cart-remove">
-          {{ t('product-page.empty-cart') }}
-        </v-alert>
-        <template v-else>
-          <div>{{ t('product-page.pay-for') }}</div>
-          <Package
-            class="justify-center mb-4"
-            v-bind="{
-              ...pricedItem!,
-              scale: 40,
-              photoUrl: lastPhotoUrl,
-              still: true,
-              hidePrice: true
-            }"
-          />
-          <v-alert v-if="hasFreeItems" color="success" class="text-center mb-2">
-            <div class="mb-4">
-              <v-icon icon="mdi-emoticon-cool" />
-              {{ t('product-page.win') }}
-            </div>
-            <div class="d-flex ga-8 justify-center flex-column flex-md-row">
-              <Package
-                v-for="free in formattedTotal.freeItems"
-                class="justify-center mb-4"
-                v-bind="{
-                  ...free,
-                  price: 0,
-                  photoUrl: lastPhotoUrl,
-                  still: true
-                }"
-              />
-            </div>
-          </v-alert>
-          <v-chip class="mt-2">
-            {{ t('product-page.total', { total: formattedTotal.total }) }}
-          </v-chip>
-        </template>
-      </div>
+      <CartSummary
+        :free-items="cartTotal.freeItems"
+        :total="cartTotal.total"
+        :priced-item="cartTotal.pricedItem!"
+        :is-empty="isEmptyCart"
+        :photo-url="lastPhotoUrl"
+      />
     </template>
 
-    <template #actions v-if="cart.length">
-      <AppButton
-        :loading="isPaymentInProgress"
-        :disabled="isPaymentInProgress"
-        @click="pay"
-        size="large"
-        icon="mdi-credit-card-outline"
-      >
-        {{ t('product-page.pay') }}
-      </AppButton>
-
-      <AppButton :disabled="isPaymentInProgress" color="error" @click="clearCart">
-        {{ t('product-page.clear-cart') }}
-      </AppButton>
+    <template #actions v-if="!isEmptyCart">
+      <CartActions :loading="isPaymentInProgress" @action="onCartAction" />
     </template>
   </PageLayout>
 
@@ -170,15 +132,5 @@ onMounted(() => {
     <div class="text-center">{{ t('product-page.products-load-error') }}</div>
   </v-snackbar>
 
-  <v-dialog v-model="dialog" width="auto" persistent>
-    <v-card max-width="400" :title="t('product-page.sure')">
-      <template #text>
-        {{ t('product-page.warning-lose-prize') }}
-      </template>
-      <template v-slot:actions>
-        <AppButton color="error" @click="clearCart">{{ t('product-page.clear-cart') }}</AppButton>
-        <AppButton @click="dialog = false">{{ t('product-page.keep-cart') }}</AppButton>
-      </template>
-    </v-card>
-  </v-dialog>
+  <ClearCartDialog v-model="dialog" @clear-cart="clearCart" />
 </template>
