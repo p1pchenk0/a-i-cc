@@ -1,9 +1,5 @@
 <script setup lang="ts">
 import AppButton from '@/components/AppButton.vue';
-import LotteryHint from '@/features/products/components/LotteryHint.vue';
-import Package from '@/features/products/components/Package.vue';
-import PageLayout from '@/layouts/PageLayout.vue';
-import Tweaker from '@/features/products/components/Tweaker.vue';
 import type { PhotoPackage } from '@/features/products/types';
 import { computed, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
@@ -12,6 +8,8 @@ import { useLottery } from '@/features/lottery';
 import { usePhotoStore } from '@/features/photo/photo.store';
 import { useProductsStore } from '@/features/products/products.store';
 import { c, t } from '@/localization';
+import { LotteryHint, Package, Tweaker } from '@/features/products/components';
+import { PageLayout } from '@/layouts';
 
 const productsStore = useProductsStore();
 const { products, isLoading, isError } = storeToRefs(productsStore);

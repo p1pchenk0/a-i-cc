@@ -69,9 +69,14 @@ const getPhotoItemStyles = () => {
         :content="formattedPrice"
         class="position-absolute left-0 top-0"
       ></v-badge>
-    </div>
 
-    <div class="package__name position-absolute">{{ id }}</div>
+      <v-badge
+        v-if="index === minAmount"
+        class="package__name position-absolute"
+        color="success"
+        :content="id"
+      ></v-badge>
+    </div>
   </div>
 </template>
 
@@ -85,11 +90,8 @@ const getPhotoItemStyles = () => {
   }
 
   &__name {
-    font-weight: bold;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-shadow: rgba(0, 0, 0, 0.75) 0 0 5px;
+    right: 0;
+    bottom: 10px;
   }
 
   &__item {

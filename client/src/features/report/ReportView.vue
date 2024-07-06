@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import PageLayout from '@/layouts/PageLayout.vue';
 import { useReportStore } from '@/features/report/report.store';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 import { generateReport } from '@/features/report/utils';
 import AppButton from '@/components/AppButton.vue';
 import { c, t } from '@/localization';
+import { PageLayout } from '@/layouts';
 
 const reportStore = useReportStore();
 

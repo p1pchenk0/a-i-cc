@@ -2,16 +2,14 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { streamVideo } from '@/features/photo/utils';
 import { FONTS } from '@/features/photo/constants';
-import PageLayout from '@/layouts/PageLayout.vue';
+import { PageLayout } from '@/layouts';
 import { usePhotoStore } from '@/features/photo/photo.store';
 import { saveFile } from '@/shared/utils';
 import AppButton from '@/components/AppButton.vue';
-import PhotoControls from '@/features/photo/components/PhotoControls.vue';
-import SplashFx from '@/features/photo/components/SplashFx.vue';
-import Extras from '@/features/photo/components/Extras.vue';
 import { useRouter } from 'vue-router';
 import { routes } from '@/router/routes';
 import { t } from '@/localization';
+import { Extras, PhotoControls, SplashFx } from '@/features/photo/components';
 
 const router = useRouter();
 const isPhotoTaken = ref(false);

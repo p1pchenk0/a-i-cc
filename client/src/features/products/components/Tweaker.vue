@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Admin from '@/features/admin/Admin.vue';
-import { HOUR_IN_MS, MINUTE_IN_MS } from '@/features/products/constants';
+import { Admin } from '@/features/admin';
 import { t } from '@/localization';
+import { HOUR_IN_MS, MINUTE_IN_MS } from '@/shared/constants';
 
 const model = defineModel<number>();
 
