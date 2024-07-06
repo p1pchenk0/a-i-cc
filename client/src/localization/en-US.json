@@ -56,7 +56,8 @@
     "prints-done": "Prints done",
     "prints-won": "Prints won",
     "save": "Save report",
-    "error": "Error loading report"
+    "error": "Error loading report",
+    "custom-income": "Custom income"
   },
   "currency": "USD"
 }

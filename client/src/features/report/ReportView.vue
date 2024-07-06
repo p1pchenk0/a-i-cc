@@ -62,11 +62,11 @@ onMounted(() => {
   <PageLayout>
     <template #title>{{ t('report-page.title') }}</template>
     <template #subtitle>
-      <AppCheckbox v-model="isCustomIncome" label="Custom income" hide-details />
+      <AppCheckbox v-model="isCustomIncome" :label="t('report-page.custom-income')" hide-details />
       <AppTextfield
         v-if="isCustomIncome"
         v-model="customIncome"
-        label="custom income"
+        :label="t('report-page.custom-income')"
         type="number"
       />
     </template>

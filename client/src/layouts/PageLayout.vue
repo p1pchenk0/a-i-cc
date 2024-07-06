@@ -3,7 +3,7 @@ import { AppCard } from '@/components';
 </script>
 
 <template>
-  <AppCard class="page-container my-10 mx-auto" elevation="2">
+  <AppCard class="page-container my-10 mx-auto" elevation="16">
     <template #title>
       <slot name="title"></slot>
     </template>
