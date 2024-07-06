@@ -2,6 +2,7 @@
 import { Admin } from '@/features/admin';
 import { t } from '@/localization';
 import { HOUR_IN_MS, MINUTE_IN_MS } from '@/shared/constants';
+import { AppRadio } from '@/components';
 
 const model = defineModel<number>();
 
@@ -27,14 +28,7 @@ const intervalOptions = [
       {{ t('interval.title') }}
     </div>
 
-    <v-radio-group v-model="model">
-      <v-radio
-        v-for="option in intervalOptions"
-        :key="option.value"
-        :label="option.label"
-        :value="option.value"
-      />
-    </v-radio-group>
+    <AppRadio v-model="model" :options="intervalOptions" />
   </Admin>
 </template>
 

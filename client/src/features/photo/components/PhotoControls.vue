@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { FONTS, MAX_CHARS_ON_CANVAS } from '@/features/photo/constants';
 import { t } from '@/localization';
+import { AppCheckbox, AppSelect, AppTextfield } from '@/components';
 
 const inputRules = [(v: string) => v.length < MAX_CHARS_ON_CANVAS || 'Limit exceeded'];
 
@@ -17,17 +18,16 @@ function onTextUpdate(e: string | null) {
 
 <template>
   <div class="d-flex ga-2 ga-md-4 flex-column flex-md-row w-100">
-    <v-checkbox hide-details :label="t('photo-controls.toggle-mirror')" v-model="mirror" />
-    <v-text-field
+    <AppCheckbox hide-details :label="t('photo-controls.toggle-mirror')" v-model="mirror" />
+    <AppTextfield
       :label="t('photo-controls.text-on-screen')"
       :hint="hint"
       clearable
       persistent-hint
-      persistent-clear
       :rules="inputRules"
       :model-value="textOnScreen"
       @update:model-value="onTextUpdate"
     />
-    <v-select v-model="activeFont" :label="t('photo-controls.font')" :items="FONTS"></v-select>
+    <AppSelect v-model="activeFont" :label="t('photo-controls.font')" :items="FONTS" />
   </div>
 </template>

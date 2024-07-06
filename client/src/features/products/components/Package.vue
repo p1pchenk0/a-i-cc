@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { getRandomInteger } from '@/shared/utils';
 import { c } from '@/localization';
+import { AppBadge } from '@/components';
 
 const props = withDefaults(
   defineProps<{
@@ -63,19 +64,19 @@ const getPhotoItemStyles = () => {
         :style="getPhotoItemStyles()"
         :key="photo"
       ></div>
-      <v-badge
+      <AppBadge
         v-if="!hidePrice && index === 1"
         color="primary"
         :content="formattedPrice"
         class="position-absolute left-0 top-0"
-      ></v-badge>
+      />
 
-      <v-badge
+      <AppBadge
         v-if="index === minAmount"
         class="package__name position-absolute"
         color="success"
         :content="id"
-      ></v-badge>
+      />
     </div>
   </div>
 </template>

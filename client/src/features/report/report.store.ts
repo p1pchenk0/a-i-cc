@@ -8,6 +8,19 @@ export const useReportStore = defineStore('report', () => {
   const report = ref<RawReport>();
 
   const { load, isLoading, isError } = useLoader(getReport);
+  const {
+    load: loadCustomReport,
+    isLoading: isCustomReportLoading,
+    isError: isCustomReportError
+  } = useLoader(getCustomReport);
+
+  async function getCustomReport(income: number) {
+    const result = await reportService.getCustomReport(income);
+
+    report.value = result.report;
+
+    return result.success;
+  }
 
   async function getReport(month: number, year: number) {
     const result = await reportService.getReport(month, year);
@@ -17,13 +30,16 @@ export const useReportStore = defineStore('report', () => {
     return result.success;
   }
 
-  const isReportReady = computed(() => !!report.value && !isLoading.value);
+  const isReportLoading = computed(() => isLoading.value || isCustomReportLoading.value);
+  const isErrorLoadingReport = computed(() => isError.value || isCustomReportError.value);
+  const isReportReady = computed(() => !!report.value && !isReportLoading.value);
 
   return {
-    isErrorLoadingReport: isError,
+    isErrorLoadingReport,
     isReportReady,
-    isReportLoading: isLoading,
+    isReportLoading,
     report,
-    getReport: load
+    getReport: load,
+    getCustomReport: loadCustomReport
   };
 });

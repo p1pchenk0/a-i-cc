@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import AppIcon from '@/components/AppIcon.vue';
+
 withDefaults(
   defineProps<{
     loading?: boolean;
@@ -25,7 +27,7 @@ withDefaults(
     variant="outlined"
   >
     <div :class="['px-2 d-flex align-center', `text-${color}`]">
-      <v-icon v-if="icon" class="mr-2" :icon="icon" />
+      <AppIcon v-if="icon" class="mr-2" :name="icon" />
       <slot></slot>
     </div>
   </v-btn>

@@ -37,7 +37,6 @@ function drawText({ ctx, width, height, text, isMirrored, font }: ApplyTextOptio
 export async function streamVideo({
   videoEl,
   canvasEl,
-  containerEl,
   mirrorFlagGetter,
   textGetter,
   fontGetter
@@ -57,7 +56,7 @@ export async function streamVideo({
 
     const proportions = videoEl.videoWidth / videoEl.videoHeight;
 
-    const width = (canvasEl.width = containerEl.clientWidth);
+    const width = (canvasEl.width = videoEl.parentElement?.clientWidth!);
     const height = (canvasEl.height = width / proportions);
 
     ctx.save();

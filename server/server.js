@@ -19,10 +19,12 @@ const orderManager = require("./order/order.manager");
   });
 
   fastify.get("/report", (request, reply) => {
-    const report = reportManager.getMonthlyReport(
-      request.query.month | 0,
-      request.query.year | 0,
-    );
+    const report = request.query.custom
+      ? reportManager.getCustomReport(request.query.income | 0)
+      : reportManager.getMonthlyReport(
+          request.query.month | 0,
+          request.query.year | 0,
+        );
 
     reply.send(report);
   });

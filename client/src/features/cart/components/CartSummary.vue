@@ -1,26 +1,31 @@
 <script setup lang="ts">
 import { c, t } from '@/localization';
-import Package from '@/features/products/components/Package.vue';
 import type { PhotoPackage } from '@/features/products/types';
 import { computed } from 'vue';
+import { AppAlert, AppChip, AppIcon } from '@/components';
+import { Package } from '@/features/products/components';
 
 const props = defineProps<{
   isEmpty: boolean;
   total: number;
-  pricedItem: PhotoPackage;
+  pricedItem: PhotoPackage | null;
   freeItems: PhotoPackage[];
   photoUrl?: string;
 }>();
 
 const formattedTotal = computed(() => c(props.total));
 
-const formattedPricedItem = computed(() => ({
-  ...props.pricedItem,
-  scale: 40,
-  photoUrl: props.photoUrl,
-  still: true,
-  hidePrice: true
-}));
+const formattedPricedItem = computed(() => {
+  if (!props.pricedItem) return null;
+
+  return {
+    ...props.pricedItem,
+    scale: 40,
+    photoUrl: props.photoUrl,
+    still: true,
+    hidePrice: true
+  };
+});
 
 const formattedFreeItems = computed(() => {
   return props.freeItems.map((item) => {
@@ -36,15 +41,19 @@ const formattedFreeItems = computed(() => {
 
 <template>
   <div class="mt-6">
-    <v-alert v-if="isEmpty" class="text-center justify-center" icon="mdi-cart-remove">
+    <AppAlert v-if="isEmpty" class="text-center justify-center" icon="mdi-cart-remove">
       {{ t('product-page.empty-cart') }}
-    </v-alert>
+    </AppAlert>
     <template v-else>
       <div>{{ t('product-page.pay-for') }}</div>
-      <Package class="justify-center mb-4" v-bind="formattedPricedItem" />
-      <v-alert v-if="freeItems.length" color="success" class="text-center mb-2">
+      <Package
+        v-if="formattedPricedItem"
+        class="justify-center mb-4"
+        v-bind="formattedPricedItem"
+      />
+      <AppAlert v-if="freeItems.length" color="success" class="text-center mb-2">
         <div class="mb-4">
-          <v-icon icon="mdi-emoticon-cool" />
+          <AppIcon name="mdi-emoticon-cool" />
           {{ t('product-page.win') }}
         </div>
         <div class="d-flex ga-8 justify-center flex-column flex-md-row">
@@ -54,10 +63,10 @@ const formattedFreeItems = computed(() => {
             v-bind="freeItem"
           />
         </div>
-      </v-alert>
-      <v-chip class="mt-2">
+      </AppAlert>
+      <AppChip class="mt-2">
         {{ t('product-page.total', { total: formattedTotal }) }}
-      </v-chip>
+      </AppChip>
     </template>
   </div>
 </template>

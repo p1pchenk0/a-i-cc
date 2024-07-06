@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import { streamVideo } from '@/features/photo/utils';
+import { Extras, PhotoActions, PhotoControls, SplashFx } from '@/features/photo/components';
 import { FONTS } from '@/features/photo/constants';
 import { PageLayout } from '@/layouts';
-import { usePhotoStore } from '@/features/photo/photo.store';
-import { saveFile } from '@/shared/utils';
-import AppButton from '@/components/AppButton.vue';
-import { useRouter } from 'vue-router';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { routes } from '@/router/routes';
+import { streamVideo } from '@/features/photo/utils';
 import { t } from '@/localization';
-import { Extras, PhotoControls, SplashFx } from '@/features/photo/components';
+import { usePhotoStore } from '@/features/photo/photo.store';
+import { useRouter } from 'vue-router';
+import { AppSnackbar } from '@/components';
 
 const router = useRouter();
 const isPhotoTaken = ref(false);
@@ -22,20 +21,22 @@ const layoutRef = ref<InstanceType<typeof PageLayout>>();
 const stopListenToVideoStream = ref<Function | null>(null);
 const activeFont = ref(FONTS[0]);
 
+const { savePhoto, setLastPhotoUrl } = usePhotoStore();
+
 const isCameraStreaming = computed(() => !!stopListenToVideoStream.value);
 
-function savePhoto(goToCart = false) {
+function onPhotoAction(type: string) {
   const dataURL = canvasRef.value!.toDataURL('image/png');
 
-  if (goToCart) {
-    usePhotoStore().setLastPhotoUrl(dataURL);
+  if (type === 'proceed') {
+    setLastPhotoUrl(dataURL);
 
     router.push({ name: routes.products.name });
 
     return;
   }
 
-  saveFile(dataURL, 'photo.png');
+  savePhoto(dataURL);
 
   isPhotoTaken.value = true;
 }
@@ -45,7 +46,6 @@ async function initVideo() {
     stopListenToVideoStream.value = await streamVideo({
       videoEl: videoRef.value!,
       canvasEl: canvasRef.value!,
-      containerEl: layoutRef.value!.getContainer(),
       mirrorFlagGetter: () => isMirrorOn.value,
       textGetter: () => textOnScreen.value,
       fontGetter: () => activeFont.value
@@ -88,29 +88,13 @@ onBeforeUnmount(() => {
     />
 
     <template #actions>
-      <AppButton
-        :disabled="!isCameraStreaming"
-        @click="savePhoto(true)"
-        color="success"
-        icon="mdi-camera"
-        size="large"
-      >
-        {{ t('photo-booth-page.take-and-proceed') }}
-      </AppButton>
-
-      <AppButton
-        :disabled="!isCameraStreaming"
-        @click="savePhoto(false)"
-        icon="mdi-content-save-outline"
-      >
-        {{ t('photo-booth-page.save') }}
-      </AppButton>
+      <PhotoActions :disabled="!isCameraStreaming" @action="onPhotoAction" />
     </template>
   </PageLayout>
 
-  <v-snackbar v-model="isSnackbarShown">
+  <AppSnackbar v-model="isSnackbarShown">
     <div>{{ t('photo-booth-page.no-permission') }}</div>
-  </v-snackbar>
+  </AppSnackbar>
 
   <Extras :text="textOnScreen" />
 </template>

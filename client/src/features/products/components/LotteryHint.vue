@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { t } from '@/localization';
+import { AppChip, AppIcon, AppTooltip } from '@/components';
 
 const lotteryText = t('lottery.hint');
 </script>
 
 <template>
-  <v-tooltip :text="lotteryText" content-class="bg-teal" :width="300" location="bottom">
+  <AppTooltip :text="lotteryText" content-class="bg-teal" :width="300" location="bottom">
     <template v-slot:activator="{ props }">
-      <v-chip v-bind="props">
+      <AppChip v-bind="props">
         <div>{{ t('lottery.title') }}</div>
-        <v-icon class="ml-2" icon="mdi-information-outline" />
-      </v-chip>
+        <AppIcon class="ml-2" name="mdi-information-outline" />
+      </AppChip>
     </template>
-  </v-tooltip>
+  </AppTooltip>
 </template>

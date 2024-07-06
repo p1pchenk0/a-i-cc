@@ -3,6 +3,16 @@ const dbManager = require("../db/db.manager");
 const { TAX_RATE } = require("../constants");
 
 const reportManager = {
+  getCustomReport(income) {
+    return {
+      ordersMade: 0,
+      printsDone: 0,
+      printsWon: 0,
+      totalIncome: income,
+      totalGifted: 0,
+      taxesToPay: income * TAX_RATE,
+    };
+  },
   getMonthlyReport(month, year) {
     const { from, to } = utils.getMonthDateRange(month, year);
 

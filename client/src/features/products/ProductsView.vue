@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import AppButton from '@/components/AppButton.vue';
 import type { PhotoPackage } from '@/features/products/types';
+import { CartActions, CartSummary, ClearCartDialog } from '@/features/cart/components';
+import { LotteryHint, Package, Tweaker } from '@/features/products/components';
+import { PageLayout } from '@/layouts';
 import { computed, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useCartStore } from '@/stores/cart';
+import { t } from '@/localization';
+import { useCartStore } from '@/features/cart/cart.store';
 import { useLottery } from '@/features/lottery';
 import { usePhotoStore } from '@/features/photo/photo.store';
 import { useProductsStore } from '@/features/products/products.store';
-import { c, t } from '@/localization';
-import { LotteryHint, Package, Tweaker } from '@/features/products/components';
-import { PageLayout } from '@/layouts';
-import CartSummary from '@/features/products/components/CartSummary.vue';
-import ClearCartDialog from '@/features/products/components/ClearCartDialog.vue';
-import CartActions from '@/features/products/components/CartActions.vue';
+import { AppSkeleton, AppSnackbar } from '@/components';
 
 const productsStore = useProductsStore();
 const { products, isLoading, isError } = storeToRefs(productsStore);
 const photoStore = usePhotoStore();
 const { lastPhotoUrl } = storeToRefs(photoStore);
 const cartStore = useCartStore();
-const { cart, cartTotal, isEmptyCart, hasFreeItems, isPaymentInProgress, isPaymentSuccessful } =
+const { cartTotal, isEmptyCart, hasFreeItems, isPaymentInProgress, isPaymentSuccessful } =
   storeToRefs(cartStore);
 
 const { selectedLotteryInterval, resetLottery, attemptLotteryPlay } = useLottery();
@@ -48,6 +46,8 @@ const makeOrder = (photoPackage: PhotoPackage) => {
 };
 
 const pay = async () => {
+  isPaymentDone.value = false;
+
   await cartStore.payForCart();
 
   isPaymentDone.value = true;
@@ -90,7 +90,7 @@ onMounted(() => {
 
       <div class="justify-center d-flex ga-6 mt-6 flex-column flex-md-row">
         <div v-if="isLoading" class="w-100">
-          <v-skeleton-loader class="w-100 ga-4 flex-nowrap" type="image@3"></v-skeleton-loader>
+          <AppSkeleton class="w-100 ga-4 flex-nowrap" type="image@3" />
         </div>
         <template v-if="!isLoading && !isError">
           <Package
@@ -105,7 +105,7 @@ onMounted(() => {
       <CartSummary
         :free-items="cartTotal.freeItems"
         :total="cartTotal.total"
-        :priced-item="cartTotal.pricedItem!"
+        :priced-item="cartTotal.pricedItem"
         :is-empty="isEmptyCart"
         :photo-url="lastPhotoUrl"
       />
@@ -118,19 +118,19 @@ onMounted(() => {
 
   <Tweaker v-model="selectedLotteryInterval" />
 
-  <v-snackbar
-    v-model="isPaymentDone"
+  <AppSnackbar
+    :model-value="isPaymentDone"
     :timeout="1000"
     :color="isPaymentSuccessful ? 'success' : 'error'"
   >
     <div class="text-center">
       {{ paymentResultText }}
     </div>
-  </v-snackbar>
+  </AppSnackbar>
 
-  <v-snackbar :model-value="isError" color="error" :timeout="2000">
+  <AppSnackbar :model-value="isError" color="error" :timeout="2000">
     <div class="text-center">{{ t('product-page.products-load-error') }}</div>
-  </v-snackbar>
+  </AppSnackbar>
 
   <ClearCartDialog v-model="dialog" @clear-cart="clearCart" />
 </template>

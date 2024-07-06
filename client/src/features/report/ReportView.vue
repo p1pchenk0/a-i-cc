@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import { useReportStore } from '@/features/report/report.store';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { generateReport } from '@/features/report/utils';
-import AppButton from '@/components/AppButton.vue';
 import { c, t } from '@/localization';
 import { PageLayout } from '@/layouts';
+import {
+  AppButton,
+  AppCheckbox,
+  AppSkeleton,
+  AppSnackbar,
+  AppTable,
+  AppTextfield
+} from '@/components';
+import { debounce } from '@/shared/utils';
 
 const reportStore = useReportStore();
 
@@ -13,28 +21,61 @@ const { report, isErrorLoadingReport, isReportReady, isReportLoading } = storeTo
 
 const skeletonType = Array(6).fill('table-row').join(',');
 
+const isCustomIncome = ref(false);
+
+const customIncome = ref(0);
+
+const debouncedIncomeInput = debounce(() => {
+  reportStore.getCustomReport(customIncome.value);
+}, 300);
+
+watch(customIncome, () => {
+  debouncedIncomeInput();
+});
+
+watch(isCustomIncome, (value) => {
+  if (!value) {
+    getReport();
+  } else if (customIncome.value) {
+    reportStore.getCustomReport(customIncome.value);
+  }
+});
+
 function saveReport() {
   if (!report.value) return;
 
   generateReport(report.value);
 }
 
-onMounted(() => {
+function getReport() {
   const date = new Date();
 
   reportStore.getReport(date.getMonth(), date.getFullYear());
+}
+
+onMounted(() => {
+  getReport();
 });
 </script>
 
 <template>
   <PageLayout>
     <template #title>{{ t('report-page.title') }}</template>
+    <template #subtitle>
+      <AppCheckbox v-model="isCustomIncome" label="Custom income" hide-details />
+      <AppTextfield
+        v-if="isCustomIncome"
+        v-model="customIncome"
+        label="custom income"
+        type="number"
+      />
+    </template>
 
     <template v-if="isReportLoading">
-      <v-skeleton-loader :type="skeletonType"></v-skeleton-loader>
+      <AppSkeleton :type="skeletonType" />
     </template>
     <template v-if="isReportReady">
-      <v-table theme="dark">
+      <AppTable>
         <thead>
           <tr>
             <th colspan="2" class="text-left">
@@ -60,9 +101,9 @@ onMounted(() => {
             <td>{{ c(report!.totalGifted) }}</td>
           </tr>
         </tbody>
-      </v-table>
+      </AppTable>
 
-      <v-table theme="dark">
+      <AppTable>
         <thead>
           <tr>
             <th colspan="2" class="text-left">{{ t('report-page.operational') }}</th>
@@ -82,7 +123,7 @@ onMounted(() => {
             <td>{{ report!.printsWon }}</td>
           </tr>
         </tbody>
-      </v-table>
+      </AppTable>
     </template>
 
     <template #actions>
@@ -97,9 +138,15 @@ onMounted(() => {
     </template>
   </PageLayout>
 
-  <v-snackbar :model-value="isErrorLoadingReport" color="error" :timeout="2000">
+  <AppSnackbar :model-value="isErrorLoadingReport" color="error" :timeout="2000">
     <div class="text-center">{{ t('report-page.error') }}</div>
-  </v-snackbar>
+  </AppSnackbar>
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped>
+tr {
+  td {
+    width: 50%;
+  }
+}
+</style>

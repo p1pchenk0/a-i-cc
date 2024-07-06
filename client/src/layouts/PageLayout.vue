@@ -1,16 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import type { VCard } from 'vuetify/components';
-
-const containerRef = ref<InstanceType<typeof VCard>>();
-
-defineExpose({
-  getContainer: () => containerRef.value?.$el
-});
+import { AppCard } from '@/components';
 </script>
 
 <template>
-  <v-card class="page-container my-10 mx-auto" ref="containerRef" elevation="16">
+  <AppCard class="page-container my-10 mx-auto" elevation="2">
     <template #title>
       <slot name="title"></slot>
     </template>
@@ -30,7 +23,7 @@ defineExpose({
         <slot name="actions"></slot>
       </div>
     </template>
-  </v-card>
+  </AppCard>
 </template>
 
 <style scoped lang="scss">

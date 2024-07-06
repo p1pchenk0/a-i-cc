@@ -1,14 +1,12 @@
 import type { PhotoPackage } from '@/features/products/types';
-import { cartService } from '@/shared/services/cart.service';
 import { computed, readonly, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useLoader } from '@/shared/utils/load';
+import { cartService } from '@/features/cart/cart.service';
 
 export const useCartStore = defineStore('cart', () => {
-  const _cart = ref<PhotoPackage[]>([]);
+  const cart = ref<PhotoPackage[]>([]);
   const { load, isLoading, isError } = useLoader(payForCart);
-
-  const cart = computed(() => readonly(_cart.value));
 
   const cartTotal = computed(() => {
     const { freeItems, pricedItem } = cart.value.reduce(
@@ -31,22 +29,22 @@ export const useCartStore = defineStore('cart', () => {
     };
   });
 
-  const isEmptyCart = computed(() => !_cart.value.length);
+  const isEmptyCart = computed(() => !cart.value.length);
 
   const hasFreeItems = computed(() => !!cartTotal.value.freeItems.length);
 
   const isPaymentSuccessful = computed(() => !isError.value);
 
   function clearCart() {
-    _cart.value = [];
+    cart.value = [];
   }
 
   function initCart(photoPackage: PhotoPackage) {
-    _cart.value = [photoPackage];
+    cart.value = [photoPackage];
   }
 
   function addToCart(photoPackages: PhotoPackage[]) {
-    _cart.value.push(...photoPackages);
+    cart.value.push(...photoPackages);
   }
 
   async function payForCart() {
@@ -62,7 +60,6 @@ export const useCartStore = defineStore('cart', () => {
 
   return {
     addToCart,
-    cart,
     cartTotal,
     clearCart,
     hasFreeItems,

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { saveFile } from '@/shared/utils';
 
 export const usePhotoStore = defineStore('photo', () => {
   const lastPhotoUrl = ref('');
@@ -7,5 +8,9 @@ export const usePhotoStore = defineStore('photo', () => {
     lastPhotoUrl.value = url;
   }
 
-  return { lastPhotoUrl, setLastPhotoUrl };
+  function savePhoto(url: string) {
+    saveFile(url, 'photo.png');
+  }
+
+  return { lastPhotoUrl, setLastPhotoUrl, savePhoto };
 });

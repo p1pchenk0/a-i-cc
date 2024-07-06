@@ -1,7 +1,6 @@
 export type VideoStreamOptions = {
   videoEl: HTMLVideoElement;
   canvasEl: HTMLCanvasElement;
-  containerEl: HTMLElement;
   mirrorFlagGetter: () => boolean;
   textGetter: () => string;
   fontGetter: () => string;

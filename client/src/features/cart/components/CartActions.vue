@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { t } from '@/localization';
-import AppButton from '@/components/AppButton.vue';
+import { AppButton } from '@/components';
 
 defineProps<{
   loading: boolean;
