@@ -3,6 +3,7 @@ import { Admin } from '@/features/admin';
 import { t } from '@/localization';
 import { HOUR_IN_MS, MINUTE_IN_MS } from '@/shared/constants';
 import { AppRadio } from '@/components';
+import { computed } from 'vue';
 
 const model = defineModel<number>();
 
@@ -20,11 +21,13 @@ const intervalOptions = [
     value: 0
   }
 ];
+
+const hideTitle = computed(() => model.value === MINUTE_IN_MS)
 </script>
 
 <template>
   <Admin>
-    <div class="text-body-2">
+    <div v-if="!hideTitle" class="text-body-2">
       {{ t('interval.title') }}
     </div>
 

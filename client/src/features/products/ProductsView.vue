@@ -2,7 +2,6 @@
 import type { PhotoPackage } from '@/features/products/types';
 import { CartActions, CartSummary, ClearCartDialog } from '@/features/cart/components';
 import { LotteryHint, Package, Tweaker } from '@/features/products/components';
-import { PageLayout } from '@/layouts';
 import { computed, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { t } from '@/localization';
@@ -42,7 +41,10 @@ const makeOrder = (photoPackage: PhotoPackage) => {
       .map((otherPackage) => ({ ...otherPackage, free: true }))
   );
 
-  if (prize) cartStore.addToCart(prize);
+  if (prize) {
+    if (photoPackage.id === '2x6') cartStore.clearCart();
+    cartStore.addToCart(prize);
+  }
 };
 
 const pay = async () => {
